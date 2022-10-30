@@ -6,7 +6,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1']
+        php-versions: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2']
     name: PHP ${{ matrix.php-versions }}
     steps:
       - name: Set locales
@@ -36,7 +36,7 @@ jobs:
         run: composer config --unset platform && composer config platform.php ${{ matrix.php-versions }}
 
       - name: Update dependencies for PHP 8.x
-        if: ${{ matrix.php-versions == '8.0' || matrix.php-versions == '8.1' }}
+        if: ${{ matrix.php-versions == '8.0' || matrix.php-versions == '8.1' || matrix.php-versions == '8.2' }}
         run: |
           composer update --ignore-platform-req=php && \
           composer remove --dev --ignore-platform-req=php phpunit/phpunit && \
@@ -44,7 +44,7 @@ jobs:
           composer require --dev --ignore-platform-req=php phpunit/phpunit ^9.0
 
       - name: Update dependencies for PHP 7.x
-        if: ${{ matrix.php-versions != '8.0' && matrix.php-versions != '8.1' }}
+        if: ${{ matrix.php-versions != '8.0' && matrix.php-versions != '8.1' && matrix.php-versions != '8.2' }}
         run: composer update
 
       - name: Clean up
